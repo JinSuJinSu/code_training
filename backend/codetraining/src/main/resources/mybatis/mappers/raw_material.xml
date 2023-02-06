@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rawMaterial">
+
+
+    <!-- 입고된 재료 조회(검색) -->
+    <select id="searchRawMaterialStorage" resultType="RawMaterialDTO">
+        <![CDATA[
+		select * from raw_material rm;
+	]]>
+    </select>
+
+<!--    &lt;!&ndash; 작업지시 등록 &ndash;&gt;-->
+<!--    <insert id="insertMaterial" parameterType="instructionvo">-->
+<!--        <![CDATA[-->
+<!--			insert into instruction_history(material_number,work_inst_date, factory, -->
+<!--			due_date, sequence, target_thickness, target_width, -->
+<!--			target_length, target_weight) values(#{materialNumber}, TO_TIMESTAMP(#{workInstDate},'YYYY/MM/DD/HH24:MI:ss'),-->
+<!--			#{factory}, TO_TIMESTAMP(#{dueDate},'YYYY/MM/DD/HH24:MI:ss'), #{sequence},-->
+<!--			#{targetThickness}, #{targetWidth}, #{targetLength}, #{targetWeight});-->
+<!--	]]>-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 작업지시 등록시 재료 진도코드, 상태코드 업데이트 &ndash;&gt;-->
+<!--    <update id="updateMaterialCode" parameterType="String">-->
+<!--        <![CDATA[-->
+<!--			update material_mgm set process_cd='2' where material_number=#{materialNumber}-->
+<!--	]]>-->
+<!--    </update>-->
