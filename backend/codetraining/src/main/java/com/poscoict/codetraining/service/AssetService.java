@@ -5,5 +5,5 @@ import com.poscoict.codetraining.dto.AssetDto;
 import java.util.List;
 
 public interface AssetService {
-    public List<AssetDto> getAsset();
+    List<AssetDto> getAsset();
 }

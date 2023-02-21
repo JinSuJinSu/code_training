@@ -1,27 +1,16 @@
-import { styled } from '@mui/material';
 import SimpleCard from 'app/layouts/SimpleCard';
-import DomesticStockContainer from './container/DomesticStockContainer';
-
-const Container = styled('div')(({ theme }) => ({
-  margin: '30px',
-  [theme.breakpoints.down('sm')]: {
-    margin: '16px',
-  },
-  '& .breadcrumb': {
-    marginBottom: '30px',
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: '16px',
-    },
-  },
-}));
+import DomesticStockTableContainer from './container/DomesticStockTableContainer';
+import DomesticStockSearchContainer from './container/DomesticStockSearchContainer';
+import { StyleContainer } from './render/StyleContainer';
 
 const DomesticStockApp = () => {
   return (
-    <Container>
+    <StyleContainer>
       <SimpleCard title="국내주식 재산현황">
-        <DomesticStockContainer/>
+        <DomesticStockSearchContainer/>
+        <DomesticStockTableContainer/>
       </SimpleCard>
-    </Container>
+    </StyleContainer>
   );
 };
 

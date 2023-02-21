@@ -9,19 +9,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockDto {
+public class StockDto{
 
     private long id;
     private String name;
     private long price;
     private long count;
+    private String moneyUnit;
     private long totalPrice;
 
     public StockDto(Stock stock) {
         id = stock.getId();
-        name = stock.getName();
-        price = stock.getPrice();
-        count = stock.getCount();
-        totalPrice = stock.getTotalPrice();
+        name = stock.getItem().getName();
+        price = stock.getItem().getPrice();
+        count = stock.getItem().getCount();
+        moneyUnit = stock.getItem().getMoneyUnit();
+        totalPrice = price*count;
     }
 }

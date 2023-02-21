@@ -7,7 +7,6 @@ import Paper from '@mui/material/Paper';
 
 import AssetTableHeaderView from './AssetTableHeaderView'
 import AssetTableBodyView from './AssetTableBodyView';
-import TableToolbar from 'app/utils/TableToolbar';
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
 
@@ -25,7 +24,6 @@ const AssetTableView = ({
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <AssetTableHeaderView

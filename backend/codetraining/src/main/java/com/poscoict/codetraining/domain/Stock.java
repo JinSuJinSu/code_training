@@ -1,9 +1,6 @@
 package com.poscoict.codetraining.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class Stock {
 
     @Id
@@ -19,9 +17,10 @@ public class Stock {
     @Column(name = "stock_id")
     private long id;
 
-    private String name;
-    private long price;
-    private long count;
-    private long totalPrice;
+    @Embedded
+    private Item item;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="item_id")
+    private ItemStandard itemStandard;
 }

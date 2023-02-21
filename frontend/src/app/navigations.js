@@ -20,6 +20,16 @@ export const navigations = [
         path: "/stock/overseas",
         iconText: "E",
       },
+      {
+        name: "국내주식시장",
+        path: "/stock/domestic/market",
+        iconText: "E",
+      },
+      {
+        name: "해외주식시장",
+        path: "/stock/overseas/market",
+        iconText: "E",
+      },
     ],
   },
   {
