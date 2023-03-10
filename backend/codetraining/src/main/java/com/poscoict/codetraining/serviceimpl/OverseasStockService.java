@@ -1,6 +1,7 @@
 package com.poscoict.codetraining.serviceimpl;
 
 import com.poscoict.codetraining.domain.Stock;
+import com.poscoict.codetraining.dto.OrderDto;
 import com.poscoict.codetraining.dto.StockDto;
 import com.poscoict.codetraining.dto.StockMarketDto;
 import com.poscoict.codetraining.repository.OverseasStockRepository;
@@ -28,12 +29,17 @@ public class OverseasStockService implements StockService {
     }
 
     @Override
-    public void insertStock(String name, Long price) {
+    public void insertStock(StockMarketDto stockMarket) {
 
     }
 
     @Override
     public Stock findStock(Long id) {
         return null;
+    }
+
+    @Override
+    public void orderStock(OrderDto orderDto) {
+
     }
 }

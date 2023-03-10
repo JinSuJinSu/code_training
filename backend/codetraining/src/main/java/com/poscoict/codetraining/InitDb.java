@@ -1,10 +1,7 @@
 package com.poscoict.codetraining;
 
 
-import com.poscoict.codetraining.dbinit.AssetDbInit;
-import com.poscoict.codetraining.dbinit.ItemStandardDbInit;
-import com.poscoict.codetraining.dbinit.StockDbInit;
-import com.poscoict.codetraining.dbinit.StockMarketDbInit;
+import com.poscoict.codetraining.dbinit.*;
 import com.poscoict.codetraining.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +17,7 @@ public class InitDb {
     private final StockDbInit stockDbInit;
     private final StockMarketDbInit stockMarketDbInit;
     private final AssetDbInit assetDbInit;
+    private final UserDbInit userDbInit;
 
     @PostConstruct
     public void init() {
@@ -27,6 +25,8 @@ public class InitDb {
         stockDbInit.dbInit();
         stockMarketDbInit.dbInit();
         assetDbInit.dbInit();
+        userDbInit.dbInit();
+
     }
 
 }

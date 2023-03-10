@@ -1,16 +1,20 @@
 package com.poscoict.codetraining.serviceimpl;
 
-import com.poscoict.codetraining.domain.ItemStandard;
-import com.poscoict.codetraining.domain.Stock;
-import com.poscoict.codetraining.domain.StockMarket;
+import com.poscoict.codetraining.domain.*;
+import com.poscoict.codetraining.dto.OrderDto;
 import com.poscoict.codetraining.dto.StockDto;
 import com.poscoict.codetraining.dto.StockMarketDto;
+import com.poscoict.codetraining.enumration.OrderStatus;
+import com.poscoict.codetraining.mapper.OrderMapper;
+import com.poscoict.codetraining.mapper.StockMarketMapper;
 import com.poscoict.codetraining.repository.DomesticStockRepository;
 import com.poscoict.codetraining.service.StockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,12 +53,59 @@ public class DomesticStockService implements StockService {
     }
 
     @Override
-    public void insertStock(String name, Long price) {
-
+    @Transactional
+    public void insertStock(StockMarketDto stockMarketDto) {
+        StockMarket stockMarket = StockMarketMapper.INSTANCE.toEntity(stockMarketDto);
+        ItemStandard itemStandard = domesticStockRepository.findStandard("국내주식");
+        Long id = itemStandard.getId();
+        StockMarket finalStockMarket = new StockMarket().builder()
+                .item(new Item().builder()
+                        .name(stockMarket.getItem().getName())
+                        .price(stockMarket.getItem().getPrice())
+                        .count(stockMarket.getItem().getCount())
+                        .moneyUnit("원")
+                        .build())
+                .itemStandard(new ItemStandard().builder()
+                        .id(id)
+                        .build())
+                .build();
+        domesticStockRepository.insertStock(finalStockMarket);
     }
 
     @Override
     public Stock findStock(Long id) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    // 주식 주문하기
+    public void orderStock(OrderDto orderDto) {
+        Order order = OrderMapper.INSTANCE.toEntity(orderDto);
+        Order finalOrder = new Order().builder()
+                .item(new Item().builder()
+                        .name(order.getItem().getName())
+                        .price(order.getItem().getPrice())
+                        .count(order.getItem().getCount())
+                        .moneyUnit("원")
+                        .build())
+                .user(new User().builder()
+                        .userId(order.getUser().getUserId())
+                        .build())
+                .status(OrderStatus.ORDER)
+                .build();
+        domesticStockRepository.orderStock(order);
+        String stockName = orderDto.getName();
+        long orderCount = orderDto.getCount();
+        domesticStockRepository.orderUpdateStock(stockName, orderCount);
+    }
+
+    // 매수 주문 완료된 주식 조회
+    public List<OrderDto> findOrders(String userId){
+        List<Order> orderList = domesticStockRepository.findOrders(userId);
+        List<OrderDto> orderDtoList = orderList.stream()
+                .map(m -> OrderMapper.INSTANCE.toDto(m))
+                .collect(Collectors.toList());
+        return orderDtoList;
     }
 }

@@ -1,8 +1,6 @@
 package com.poscoict.codetraining.repository;
 
-import com.poscoict.codetraining.domain.ItemStandard;
-import com.poscoict.codetraining.domain.Stock;
-import com.poscoict.codetraining.domain.StockMarket;
+import com.poscoict.codetraining.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -47,6 +45,38 @@ public class DomesticStockRepository{
                 .getSingleResult();
     }
 
+
+    // 주식 추가하기
+    public void insertStock(StockMarket stockMarket) {
+        em.persist(stockMarket);
+    }
+
+    // 주식 매수 주문하기
+    public void orderStock(Order order) {
+        em.persist(order);
+    }
+
+
+    // 매수 주문한 주식 업데이트 하기
+    public int orderUpdateStock(String stockName, long orderCount) {
+        return em.createQuery("update StockMarket stockMarket " +
+                                "set stockMarket.orderCount = stockMarket.orderCount + :orderCount " +
+                                "where stockMarket.item.name=:name")
+                .setParameter("name",stockName)
+                .setParameter("orderCount",orderCount)
+                .executeUpdate();
+    }
+    // 유저별 주문 정보 조회하기
+    public List<Order> findOrders(String userId){
+        return em.createQuery("select order from Order order " +
+                                "where order.user.userId=:userId",
+                        Order.class)
+                .setParameter("userId",userId)
+                .getResultList();
+    }
+
+
+
     // 주식 정보 조회(테스트용)
     public Stock findStock(String stockName) {
         return em.createQuery("select stock from Stock stock " +
@@ -56,8 +86,22 @@ public class DomesticStockRepository{
                 .getSingleResult();
     }
 
-    public void insertStock(String name, Long price) {
+    // 주식 시작정보 조회(테스트용)
+    public StockMarket findStockMarket(String stockName) {
+        return em.createQuery("select stockMarket from StockMarket stockMarket " +
+                                "where stockMarket.item.name=:name",
+                        StockMarket.class)
+                .setParameter("name",stockName)
+                .getSingleResult();
+    }
 
+    // 주문 정보 조회(테스트용)
+    public Order findOrder(String stockName) {
+        return em.createQuery("select order from Order order " +
+                                "where order.item.name=:name",
+                        Order.class)
+                .setParameter("name",stockName)
+                .getSingleResult();
     }
 
 

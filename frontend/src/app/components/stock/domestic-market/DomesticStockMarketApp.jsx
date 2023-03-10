@@ -17,7 +17,7 @@ const DomesticStockMarketApp = () => {
           <MarginStyle>
             <DomesticStockMarketInsertContainer/>
           </MarginStyle>
-        <DomesticStockMarketContainer/>
+            <DomesticStockMarketContainer/>
       </SimpleCard>
     </StyleContainer>
   );

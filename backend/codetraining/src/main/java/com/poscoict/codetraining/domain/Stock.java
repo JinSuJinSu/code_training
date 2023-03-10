@@ -10,10 +10,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString
+@SequenceGenerator(
+        name = "STOCK_SEQ_GENERATOR",
+        sequenceName = "STOCK_SEQ",
+        initialValue = 1, allocationSize = 30)
 public class Stock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STOCK_SEQ_GENERATOR")
     @Column(name = "stock_id")
     private long id;
 

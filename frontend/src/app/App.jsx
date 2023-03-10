@@ -2,6 +2,7 @@ import { useRoutes } from 'react-router-dom';
 import { MatxTheme } from './layouts';
 import { SettingsProvider } from './contexts/SettingsContext';
 import routes from './routes';
+import { UserContext } from './contexts/UserContext';
 
 
 const App = () => {
@@ -9,9 +10,11 @@ const App = () => {
 
   return (
         <SettingsProvider>
-          <MatxTheme>
-            {content}
-          </MatxTheme>
+          <UserContext.Provider value="hjs429">
+            <MatxTheme>
+              {content}
+            </MatxTheme>
+          </UserContext.Provider>
         </SettingsProvider>
   );
 };

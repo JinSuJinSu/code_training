@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 public class StockMarketTestUtils {
 
     public static void addStockMarket(
-        EntityManager em, DomesticStockRepository domesticStockRepository,
+        TestEntityManager em, DomesticStockRepository domesticStockRepository,
         String stockType){
 
         ItemStandard itemStandard;

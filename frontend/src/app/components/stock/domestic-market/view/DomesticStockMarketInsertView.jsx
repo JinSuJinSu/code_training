@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Modal, Box, Typography } from '@mui/material'
+import { Button, Modal, Box, Typography, 
+  FormControl, Input, InputLabel } from '@mui/material'
 import { modalStyle } from '../render/StyleContainer'
 import styled from '@emotion/styled';
 
@@ -7,7 +8,9 @@ const DomesticStockMarketInsertView = ({
   open,
   setOpen,
   handleOpen,
-  handleClose
+  handleClose,
+  handleInputChange,
+  handleSubmit
 }) => {
   const MarginStyle = styled('mark')(({ theme }) => ({
   marginLeft: '2em',
@@ -29,14 +32,23 @@ const DomesticStockMarketInsertView = ({
       >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            모달 입력 해라....
+            <div>
+              <InputLabel htmlFor="stock">주식 항목</InputLabel>
+              <Input id="stock-name" name="name" onChange={handleInputChange} />
+              <InputLabel htmlFor="stock-name">주당 가격</InputLabel>
+              <Input id="stock-price" name="price" onChange={handleInputChange}/>
+              <InputLabel htmlFor="stock-count">등록 개수</InputLabel>
+              <Input id="stock-count" name="count" onChange={handleInputChange}/>
+              <Button onClick={handleSubmit}></Button>
+            </div>
           </Typography>
           
           <Button 
             variant="contained" 
             size="large"
+            onClick={handleSubmit}
             >
-              Insert
+              등록하기
           </Button>
           <MarginStyle>
             <Button 
@@ -44,7 +56,7 @@ const DomesticStockMarketInsertView = ({
               size="large"
               onClick={handleClose}
               >
-                Close
+                닫기
             </Button>
           </MarginStyle>
         </Box>

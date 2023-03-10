@@ -13,10 +13,14 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@SequenceGenerator(
+        name = "ITEMSTANDARD_SEQ_GENERATOR",
+        sequenceName = "ITEMSTANDARD_SEQ",
+        initialValue = 1, allocationSize = 10)
 public class ItemStandard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ITEMSTANDARD_SEQ_GENERATOR")
     @Column(name = "item_id")
     private long id;
 
