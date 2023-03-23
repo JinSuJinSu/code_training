@@ -35,7 +35,7 @@ public class StockController {
     }
 
     // 국내주식 주문현황 조회
-    @GetMapping("/domestic/order")
+    @GetMapping("/domestic/order/{userId}")
     public List<OrderDto> findOrders(@PathVariable("userId") String userId ) {
         List<OrderDto> orderDtoList = domesticStockService.findOrders(userId);
         return orderDtoList;

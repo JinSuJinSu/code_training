@@ -30,7 +30,4 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserGrade grade;
-
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
 }

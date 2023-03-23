@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +37,10 @@ public class DomesticStockService implements StockService {
     public List<StockDto> getStockList(String text) {
         ItemStandard itemStandard = domesticStockRepository.findStandard("국내주식");
         Long id = itemStandard.getId();
-        List<Stock> StockList = domesticStockRepository.getStockList(text,id);
+        User user = domesticStockRepository.findUser("hjs429");
+        Long userTransaction = user.getId(); // getId를 넣었지만 pk는 유저ID가 아닌 유저 Transaction을 사용한다.
+
+        List<Stock> StockList = domesticStockRepository.getStockList(text,id,userTransaction);
         List<StockDto> stockDTO = StockList.stream()
                 .map(m -> new StockDto(m))
                 .collect(Collectors.toList());
@@ -57,7 +63,6 @@ public class DomesticStockService implements StockService {
     public void insertStock(StockMarketDto stockMarketDto) {
         StockMarket stockMarket = StockMarketMapper.INSTANCE.toEntity(stockMarketDto);
         ItemStandard itemStandard = domesticStockRepository.findStandard("국내주식");
-        Long id = itemStandard.getId();
         StockMarket finalStockMarket = new StockMarket().builder()
                 .item(new Item().builder()
                         .name(stockMarket.getItem().getName())
@@ -65,9 +70,7 @@ public class DomesticStockService implements StockService {
                         .count(stockMarket.getItem().getCount())
                         .moneyUnit("원")
                         .build())
-                .itemStandard(new ItemStandard().builder()
-                        .id(id)
-                        .build())
+                .itemStandard(itemStandard)
                 .build();
         domesticStockRepository.insertStock(finalStockMarket);
     }
@@ -81,7 +84,11 @@ public class DomesticStockService implements StockService {
     @Transactional
     // 주식 주문하기
     public void orderStock(OrderDto orderDto) {
+        // 날짜 패턴 적용하기
+        LocalDateTime dateTime = LocalDateTime.now();
         Order order = OrderMapper.INSTANCE.toEntity(orderDto);
+        User user = domesticStockRepository.findUser("hjs429");
+
         Order finalOrder = new Order().builder()
                 .item(new Item().builder()
                         .name(order.getItem().getName())
@@ -89,12 +96,11 @@ public class DomesticStockService implements StockService {
                         .count(order.getItem().getCount())
                         .moneyUnit("원")
                         .build())
-                .user(new User().builder()
-                        .userId(order.getUser().getUserId())
-                        .build())
+                .user(user)
                 .status(OrderStatus.ORDER)
+                .orderDate(dateTime)
                 .build();
-        domesticStockRepository.orderStock(order);
+        domesticStockRepository.orderStock(finalOrder);
         String stockName = orderDto.getName();
         long orderCount = orderDto.getCount();
         domesticStockRepository.orderUpdateStock(stockName, orderCount);

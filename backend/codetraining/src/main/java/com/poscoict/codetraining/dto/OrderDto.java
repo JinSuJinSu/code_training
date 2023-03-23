@@ -1,15 +1,15 @@
 package com.poscoict.codetraining.dto;
 
 import com.poscoict.codetraining.domain.Stock;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class OrderDto {
     private String name;
     private long count;

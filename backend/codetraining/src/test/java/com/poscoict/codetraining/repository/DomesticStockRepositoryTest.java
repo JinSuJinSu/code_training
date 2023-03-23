@@ -8,6 +8,7 @@ import com.poscoict.codetraining.dbinit.UserTestUtils;
 import com.poscoict.codetraining.domain.*;
 import com.poscoict.codetraining.domain.Order;
 import com.poscoict.codetraining.enumration.OrderStatus;
+import com.poscoict.codetraining.mapper.OrderMapper;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +38,10 @@ class DomesticStockRepositoryTest {
 
     @Autowired
     private DomesticStockRepository domesticStockRepository;
-
     // 테스트에 사용하는 공통 메소드
     public Order createOrder(String name, long price, long count){
+        LocalDateTime dateTime = LocalDateTime.now();
+        User user = em.find(User.class, 1L);
         return new Order().builder()
                 .item(new Item().builder()
                         .name(name)
@@ -45,10 +49,8 @@ class DomesticStockRepositoryTest {
                         .count(count)
                         .moneyUnit("원")
                         .build())
-                .user(new User().builder()
-                        .userId("hjs429")
-                        .build())
-                .orderDate(LocalDateTime.now())
+                .user(user)
+                .orderDate(dateTime)
                 .status(OrderStatus.ORDER)
                 .build();
     }
@@ -56,12 +58,12 @@ class DomesticStockRepositoryTest {
     @BeforeEach
     public void init() {
         System.out.println("데이터 삽입 시작");
+        UserTestUtils.addUser(em);
         ItemStandardTestUtils.addItemStandard(em, "국내주식");
         // 객체가 Entity로 매핑되어 있어서 단순 삽입으로는 확인이 어려움
         // 삽입하는 데이터는 해당 클래스의 메소드 참조
         StockTestUtils.addStock(em, domesticStockRepository, "국내주식");
         StockMarketTestUtils.addStockMarket(em, domesticStockRepository, "국내주식");
-        UserTestUtils.addUser(em);
 
     }
 
@@ -73,9 +75,12 @@ class DomesticStockRepositoryTest {
         // 규격 조회 후 해당 객체의 id를 넣어주자
         ItemStandard itemStandard = domesticStockRepository.findStandard("국내주식");
         Long id = itemStandard.getId();
+        User user = domesticStockRepository.findUser("hjs429");
+        Long userTransaction = user.getId(); // getId를 넣었지만 pk는 유저ID가 아닌 유저 Transaction을 사용한다.
 
-        List<Stock> StockList1 = domesticStockRepository.getStockList("",id);
-        List<Stock> StockList2 = domesticStockRepository.getStockList("샤나",id);
+        List<Stock> StockList1 = domesticStockRepository.getStockList("",id, userTransaction);
+        List<Stock> StockList2 = domesticStockRepository.getStockList("샤나",id, userTransaction);
+
         // when
         int size1 = StockList1.size();
         int size2 = StockList2.size();
@@ -93,7 +98,6 @@ class DomesticStockRepositoryTest {
         // 규격 조회 후 해당 객체의 id를 넣어주자
         ItemStandard itemStandard = domesticStockRepository.findStandard("국내주식");
         Long id = itemStandard.getId();
-        System.out.println("아이디 : " + id);
 
         List<StockMarket> StockList1 = domesticStockRepository.getStockMarketList("",id);
         List<StockMarket> StockList2 = domesticStockRepository.getStockMarketList("샤나",id);
@@ -115,9 +119,13 @@ class DomesticStockRepositoryTest {
 
         // when
         domesticStockRepository.orderStock(order);
-        System.out.println("주문 정보 : " + order);
+        System.out.println("주문 : " + order);
         Order recentOrder = domesticStockRepository.findOrder("니나브ICT");
+
         //then
+        System.out.println("주문 정보 : " + order);
+        System.out.println("조회된 주문 정보 : " + recentOrder);
+
         assertThat(recentOrder.getItem().getName()).isEqualTo("니나브ICT");
         assertThat(recentOrder.getItem().getPrice()).isEqualTo(10000);
         assertThat(recentOrder.getItem().getCount()).isEqualTo(5);

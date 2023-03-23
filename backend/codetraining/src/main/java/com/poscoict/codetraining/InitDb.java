@@ -21,11 +21,11 @@ public class InitDb {
 
     @PostConstruct
     public void init() {
+        userDbInit.dbInit();
         itemStandardDbInit.dbInit();
         stockDbInit.dbInit();
         stockMarketDbInit.dbInit();
         assetDbInit.dbInit();
-        userDbInit.dbInit();
 
     }
 

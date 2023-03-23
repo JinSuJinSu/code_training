@@ -30,14 +30,6 @@ const DomesticStockMarketStore = observable({
       console.log(response);
     })
   },
-
-  // 주식시장 주문 현황 조회
-  searchOrder(userId) {
-      axios.get(`/api/stock/domestic/order`,data)
-      .then((response) => {
-        console.log(response);
-      })
-    }
 })
 
 export { DomesticStockMarketStore };

@@ -3,10 +3,7 @@ package com.poscoict.codetraining.repository;
 import com.poscoict.codetraining.dbinit.ItemStandardTestUtils;
 import com.poscoict.codetraining.dbinit.StockMarketTestUtils;
 import com.poscoict.codetraining.dbinit.StockTestUtils;
-import com.poscoict.codetraining.domain.Item;
-import com.poscoict.codetraining.domain.ItemStandard;
-import com.poscoict.codetraining.domain.Stock;
-import com.poscoict.codetraining.domain.StockMarket;
+import com.poscoict.codetraining.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,9 +47,11 @@ class OverseasStockRepositoryTest {
         // 규격 조회 후 해당 객체의 id를 넣어주자
         ItemStandard itemStandard = domesticStockRepository.findStandard("해외주식");
         Long id = itemStandard.getId();
+        User user = domesticStockRepository.findUser("hjs429");
+        Long userTransaction = user.getId(); // getId를 넣었지만 pk는 유저ID가 아닌 유저 Transaction을 사용한다.
 
-        List<Stock> StockList1 = domesticStockRepository.getStockList("",id);
-        List<Stock> StockList2 = domesticStockRepository.getStockList("자바",id);
+        List<Stock> StockList1 = domesticStockRepository.getStockList("",id,userTransaction);
+        List<Stock> StockList2 = domesticStockRepository.getStockList("자바",id,userTransaction);
         // when
         int size1 = StockList1.size();
         int size2 = StockList2.size();

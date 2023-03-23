@@ -17,5 +17,6 @@ public interface OrderMapper {
 
     @Mapping(source = "item.name", target = "name")
     @Mapping(source = "item.count", target = "count")
+    @Mapping(source = "orderDate", target = "orderDate")
     OrderDto toDto(Order entity);
 }

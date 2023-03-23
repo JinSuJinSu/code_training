@@ -1,33 +1,29 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import DomesticStockOrderView from '../view/DomesticStockOrderView';
 import { DomesticStockStore } from '../store/DomesticStockStore';
+import { UserContext } from 'app/contexts/UserContext';
 
 const DomesticStockOrderContainer = () => {
-  const [searchValue, setSearchValue] = useState('');
 
-  const handleChange = event => {
-    setSearchValue(event.target.value);
-  }
+  const userId = useContext(UserContext);
+  const height = 400;
 
-  const onSearch = () =>{
-    const searchText = searchValue === '' ? 'ALL' : searchValue
-    DomesticStockStore.showDomesticStock(searchText)
-  }
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  const inputSearch = (event) => {
-    if (event.key === 'Enter'){
-      event.preventDefault();
-      onSearch();
-    }
-  }
+  useEffect(() => {
+    DomesticStockStore.showOrder(userId);
+  }, []);
 
   return (
     <DomesticStockOrderView
-    searchValue={searchValue}
-    handleChange={handleChange}
-    onSearch={onSearch}
-    inputSearch={inputSearch}
+    orderList={DomesticStockStore.orderList}
+    height={height}
+    open={open}
+    handleOpen={handleOpen}
+    handleClose={handleClose}
     />
   )
 };
